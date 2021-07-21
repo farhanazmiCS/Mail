@@ -21,11 +21,12 @@ function compose_email() {
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
 
-  document.querySelector('submit').addEventListener('click', send_email);
+  // Upon an 'on-submit' event, query the FORM to be submitted
+  document.querySelector('#compose-form').addEventListener('submit', send_email);
 }
 
 function load_mailbox(mailbox) {
-  
+
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
@@ -35,6 +36,8 @@ function load_mailbox(mailbox) {
 }
 
 function send_email() {
+
+  // Upload the field data as JSON
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
@@ -42,5 +45,9 @@ function send_email() {
       subject: document.querySelector('#compose-subject').value,
       body: document.querySelector('#compose-body').value
     })
+  })
+  .then(response => response.json())
+  .then(result => {
+    console.log(result);
   })
 }
