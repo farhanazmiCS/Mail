@@ -34,7 +34,17 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   // Call fetch_email function
-  fetch_email(mailbox);
+  fetch_mailbox(mailbox);
+}
+
+function view_email(id) {
+  // Show the email and hide other views
+  document.querySelector('#email-view').style.display = 'block';
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+
+  fetch_email(id);
+
 }
 
 function send_email() {
@@ -51,7 +61,7 @@ function send_email() {
   .then(response => response.json())
 }
 
-function fetch_email(mailbox) {
+function fetch_mailbox(mailbox) {
   
   // Fetch mail from the respective mailboxes
   fetch(`/emails/${mailbox}`)
@@ -61,25 +71,55 @@ function fetch_email(mailbox) {
   });
   
   function loop(element) {
+    // Get id of element
+    var id = element.id
     // Each email contained in a div
     var div = document.createElement('div');
+    div.id = 'mail-element';
+    var a = document.createElement('a');
+    a.href = `/emails/${id}`
     // Sender
-    var sender = document.createElement('h6');
+    var sender = document.createElement('h5');
     var sender_text = document.createTextNode(`${element.sender}`);
     sender.appendChild(sender_text);
     // Subject
     var subject = document.createElement('p');
     var subject_text = document.createTextNode(`${element.subject}`);
     subject.appendChild(subject_text);
-    // Body
-    var body = document.createElement('p');
-    var body_text = document.createTextNode(`${element.body}`);
-    body.appendChild(body_text);
     // Append Sender, Subject and Body into 'div'
     div.appendChild(sender);
     div.appendChild(subject);
-    div.appendChild(body);
     // Append into 'emails-view'
     document.getElementById('emails-view').appendChild(div);
   }
+}
+
+function fetch_email(id) {
+  fetch(`emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+    // Create Div Element
+    document.createElement('div');
+    // Create 'From' Element
+    var from = document.createElement('h5');
+    from.id = 'from';
+    var from_item = `From: ${email.sender}`;
+    from.appendChild(from_item)
+    // Create 'To' Element
+    var to = document.createElement('h5');
+    to.id = 'to';
+    var to_item = `To: ${email.recipients[0]}`
+    to.appendChild(to_item);
+    // Create 'Subject' Element
+    var subject = document.createElement('h5');
+    subject.id = 'subject';
+    var subject_item = `Subject: ${email.subject}`;
+    subject.appendChild(subject_item);
+    // Append to div
+    div.appendChild(from);
+    div.appendChild(to);
+    div.appendChild(subject);
+    // Append to email-view
+    document.getElementById('email-view').appendChild(div);
+  })
 }

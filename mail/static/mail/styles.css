@@ -1,3 +1,11 @@
 textarea {
     min-height: 400px;
 }
+
+#mail-element {
+    border: 0.5px solid black;
+    border-radius: 2px;
+    padding-left: 10px;
+    padding-top: 10px;
+    margin: 2px;
+}
