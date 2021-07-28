@@ -14,6 +14,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#read-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -29,6 +30,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#read-view').style.display = 'none';
  
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -37,18 +39,7 @@ function load_mailbox(mailbox) {
   fetch_mailbox(mailbox);
 }
 
-function view_email(id) {
-  // Show the email and hide other views
-  document.querySelector('#email-view').style.display = 'block';
-  document.querySelector('#emails-view').style.display = 'none';
-  document.querySelector('#compose-view').style.display = 'none';
-
-  fetch_email(id);
-
-}
-
 function send_email() {
-
   // Upload the field data as JSON
   fetch('/emails', {
     method: 'POST',
@@ -62,7 +53,6 @@ function send_email() {
 }
 
 function fetch_mailbox(mailbox) {
-  
   // Fetch mail from the respective mailboxes
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
@@ -72,12 +62,10 @@ function fetch_mailbox(mailbox) {
   
   function loop(element) {
     // Get id of element
-    var id = element.id
     // Each email contained in a div
     var div = document.createElement('div');
     div.id = 'mail-element';
-    var a = document.createElement('a');
-    a.href = `/emails/${id}`
+    div.setAttribute('onclick', `read_email(${element.id})`);
     // Sender
     var sender = document.createElement('h5');
     var sender_text = document.createTextNode(`${element.sender}`);
@@ -86,40 +74,33 @@ function fetch_mailbox(mailbox) {
     var subject = document.createElement('p');
     var subject_text = document.createTextNode(`${element.subject}`);
     subject.appendChild(subject_text);
-    // Append Sender, Subject and Body into 'div'
+    // Timestamp
+    var timestamp = document.createElement('p');
+    var timestamp_text = document.createTextNode(`${element.timestamp}`);
+    timestamp.style.color = 'grey';
+    timestamp.appendChild(timestamp_text);
+    // Append Sender, Subject and Button into 'div'
     div.appendChild(sender);
     div.appendChild(subject);
+    div.appendChild(timestamp);
     // Append into 'emails-view'
     document.getElementById('emails-view').appendChild(div);
   }
 }
 
-function fetch_email(id) {
-  fetch(`emails/${id}`)
+function read_email(identifier) {
+  // Fetch email id
+  fetch(`emails/${identifier}`)
   .then(response => response.json())
   .then(email => {
-    // Create Div Element
-    document.createElement('div');
-    // Create 'From' Element
-    var from = document.createElement('h5');
-    from.id = 'from';
-    var from_item = `From: ${email.sender}`;
-    from.appendChild(from_item)
-    // Create 'To' Element
-    var to = document.createElement('h5');
-    to.id = 'to';
-    var to_item = `To: ${email.recipients[0]}`
-    to.appendChild(to_item);
-    // Create 'Subject' Element
-    var subject = document.createElement('h5');
-    subject.id = 'subject';
-    var subject_item = `Subject: ${email.subject}`;
-    subject.appendChild(subject_item);
-    // Append to div
-    div.appendChild(from);
-    div.appendChild(to);
-    div.appendChild(subject);
-    // Append to email-view
-    document.getElementById('email-view').appendChild(div);
-  })
+    document.querySelector('#from').innerHTML = `<h5>From: ${email.sender}</h5>`;
+    document.querySelector('#to').innerHTML = `<h5>To: ${email.recipients}</h5>`;
+    document.querySelector('#subject').innerHTML = `<h5>Subject: ${email.subject}</h5>`;
+    document.querySelector('#timestamp').innerHTML = `<p style="color: grey;">${email.timestamp}</p>`
+    document.querySelector('#body').innerHTML = `<p>${email.body}</p>`;
+  });
+  // Show read-email view and hide the other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#read-view').style.display = 'block';
 }
