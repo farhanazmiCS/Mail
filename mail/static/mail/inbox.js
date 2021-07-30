@@ -15,6 +15,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#read-view').style.display = 'none';
+  document.querySelector('#reply-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -31,12 +32,14 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#read-view').style.display = 'none';
+  document.querySelector('#reply-view').style.display = 'none';
  
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   // Call fetch_email function
   fetch_mailbox(mailbox);
+
 }
 
 function send_email() {
@@ -98,9 +101,104 @@ function read_email(identifier) {
     document.querySelector('#subject').innerHTML = `<h5>Subject: ${email.subject}</h5>`;
     document.querySelector('#timestamp').innerHTML = `<p style="color: grey;">${email.timestamp}</p>`
     document.querySelector('#body').innerHTML = `<p>${email.body}</p>`;
+    // Reply email button
+    var reply_element = document.querySelector('#reply');
+    reply_element.setAttribute('onclick', `reply_email(${identifier})`);
+    reply_element.style.color = '#007bff';
+    // Archive / Unarchive email button 
+    if (!email.archived) {
+      var archive_element = document.querySelector('#archive');
+      var unarchive_element = document.querySelector('#unarchive');
+      archive_element.style.display = 'block';
+      unarchive_element.style.display = 'none';
+      archive_element.setAttribute('onclick', `archive_email(${identifier})`);
+      archive_element.style.color = '#007bff';
+    }
+    else {
+      var archive_element = document.querySelector('#archive');
+      var unarchive_element = document.querySelector('#unarchive');
+      archive_element.style.display = 'none';
+      unarchive_element.style.display = 'block';
+      unarchive_element.setAttribute('onclick', `unarchive_email(${identifier})`);
+      unarchive_element.style.color = '#007bff';
+    }
   });
+  // Set read to true once email is clicked
+  fetch(`emails/${identifier}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      read: true,
+    })
+  })
+  
   // Show read-email view and hide the other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#reply-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#read-view').style.display = 'block';
+}
+
+function reply_email(identifier) {
+
+  fetch(`emails/${identifier}`)
+  .then(response => response.json())
+  .then(email => {
+    // Pre-fill the fields with data
+    document.querySelector('#reply-recipients').value = email.sender;
+    document.querySelector('#reply-subject').value = `RE: ${email.subject}`;
+    document.querySelector('#reply-body').value = `On ${email.timestamp} ${email.sender} wrote: ${email.body}`;
+    document.querySelector('#reply-recipients').disabled = true;
+    document.querySelector('#reply-subject').disabled = true;
+    document.querySelector('#reply-body').disabled = true;
+    // Empty Editable Field
+    document.querySelector('#reply-body-editable').value = '';
+  });
+
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#read-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#reply-view').style.display = 'block';
+
+  // Upon an 'on-submit' event, query the FORM to be submitted
+  document.querySelector('#reply-form').addEventListener('submit', () => reply_email_submit());
+}
+
+function reply_email_submit() {
+  // Upload the field data as JSON
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+      recipients: document.querySelector('#reply-recipients').value,
+      subject: document.querySelector('#reply-subject').value,
+      body: document.querySelector('#reply-body-editable').value
+    })
+  })
+  .then(response => response.json())
+}
+
+// Archive emails in Inbox
+function archive_email(identifier) {
+  fetch(`/emails/${identifier}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: true
+    })
+  })
+  .then(response => response.json())
+  // Load inbox
+  load_mailbox('inbox');
+}
+
+// Unarchive emails in Inbox
+function unarchive_email(identifier) {
+  fetch(`/emails/${identifier}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: false
+    })
+  })
+  .then(response => response.json())
+  // Load inbox
+  load_mailbox('inbox');
 }

@@ -18,7 +18,7 @@
         <h3>New Email</h3>
         <form id="compose-form">
             <div class="form-group">
-                From: <input disabled class="form-control" value="{{ request.user.email }}">
+                From: <input disabled id="compose-sender" class="form-control" value="{{ request.user.email }}">
             </div>
             <div class="form-group">
                 To: <input id="compose-recipients" class="form-control">
@@ -26,8 +26,24 @@
             <div class="form-group">
                 <input class="form-control" id="compose-subject" placeholder="Subject">
             </div>
-            <textarea class="form-control" id="compose-body" placeholder="Body"></textarea><br>
+            <textarea class="form-control" id="compose-body" placeholder="Body" rows="4"></textarea><br>
             <input type="submit" class="btn btn-primary"/>
+        </form>
+    </div>
+
+    <div id="reply-view">
+        <h3>Reply Email</h3>
+        <form id="reply-form">
+            <div class="form-group">
+                To: <input id="reply-recipients" class="form-control">
+            </div>
+            <div class="form-group">
+                <input class="form-control" id="reply-subject" placeholder="Subject">
+            </div>
+            <textarea class="form-control" id="reply-body" placeholder="Body" rows="4"></textarea><br>
+            <h3>Your Reply</h3>
+            <textarea class="form-control" id="reply-body-editable" placeholder="Body" rows="4"></textarea><br>
+            <input type="submit" class="btn btn-primary" value="Reply"/>
         </form>
     </div>
 
@@ -43,6 +59,9 @@
         <hr>
         <div id="body">
         </div>
+        <p id="reply">Reply Email</p>
+        <p id="archive">Archive Email</p>
+        <p id="unarchive">Unarchive Email</p>
     </div>
 
 {% endblock %}
