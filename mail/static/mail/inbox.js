@@ -104,12 +104,11 @@ function read_email(identifier) {
     // Reply email button
     var reply_element = document.querySelector('#reply');
     reply_element.setAttribute('onclick', `reply_email(${identifier})`);
-    reply_element.style.color = '#007bff';
     // Archive / Unarchive email button 
     if (!email.archived) {
       var archive_element = document.querySelector('#archive');
       var unarchive_element = document.querySelector('#unarchive');
-      archive_element.style.display = 'block';
+      archive_element.style.display = 'inline-block';
       unarchive_element.style.display = 'none';
       archive_element.setAttribute('onclick', `archive_email(${identifier})`);
       archive_element.style.color = '#007bff';
@@ -118,7 +117,7 @@ function read_email(identifier) {
       var archive_element = document.querySelector('#archive');
       var unarchive_element = document.querySelector('#unarchive');
       archive_element.style.display = 'none';
-      unarchive_element.style.display = 'block';
+      unarchive_element.style.display = 'inline-block';
       unarchive_element.setAttribute('onclick', `unarchive_email(${identifier})`);
       unarchive_element.style.color = '#007bff';
     }
@@ -184,8 +183,7 @@ function archive_email(identifier) {
     body: JSON.stringify({
       archived: true
     })
-  })
-  .then(response => response.json())
+  });
   // Load inbox
   load_mailbox('inbox');
 }
@@ -197,8 +195,7 @@ function unarchive_email(identifier) {
     body: JSON.stringify({
       archived: false
     })
-  })
-  .then(response => response.json())
+  });
   // Load inbox
-  load_mailbox('inbox');
+  load_mailbox('archive');
 }

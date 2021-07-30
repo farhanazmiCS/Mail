@@ -9,3 +9,9 @@ textarea {
     padding-top: 10px;
     margin: 5px;
 }
+
+#reply {
+    display: inline-block;
+    padding-right: 15px;
+    color: #007bff;
+}
