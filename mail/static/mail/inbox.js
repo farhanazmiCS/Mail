@@ -39,7 +39,6 @@ function load_mailbox(mailbox) {
 
   // Call fetch_email function
   fetch_mailbox(mailbox);
-
 }
 
 function send_email() {
@@ -104,22 +103,25 @@ function read_email(identifier) {
     // Reply email button
     var reply_element = document.querySelector('#reply');
     reply_element.setAttribute('onclick', `reply_email(${identifier})`);
-    // Archive / Unarchive email button 
-    if (!email.archived) {
-      var archive_element = document.querySelector('#archive');
-      var unarchive_element = document.querySelector('#unarchive');
-      archive_element.style.display = 'inline-block';
-      unarchive_element.style.display = 'none';
-      archive_element.setAttribute('onclick', `archive_email(${identifier})`);
-      archive_element.style.color = '#007bff';
+    // Archive / Unarchive email button
+    var archive_element = document.querySelector('#archive');
+    var unarchive_element = document.querySelector('#unarchive');
+    // Archive / Unarchive button does not apply for sent emails
+    if (email.sender != document.getElementById('logged-user').innerHTML) {
+      if (!email.archived) {
+        archive_element.style.display = 'inline-block';
+        unarchive_element.style.display = 'none';
+        archive_element.setAttribute('onclick', `archive_email(${identifier})`);
+      }
+      else {
+        archive_element.style.display = 'none';
+        unarchive_element.style.display = 'inline-block';
+        unarchive_element.setAttribute('onclick', `unarchive_email(${identifier})`);
+      }
     }
     else {
-      var archive_element = document.querySelector('#archive');
-      var unarchive_element = document.querySelector('#unarchive');
       archive_element.style.display = 'none';
-      unarchive_element.style.display = 'inline-block';
-      unarchive_element.setAttribute('onclick', `unarchive_email(${identifier})`);
-      unarchive_element.style.color = '#007bff';
+      unarchive_element.style.display = 'none';
     }
   });
   // Set read to true once email is clicked
@@ -144,7 +146,12 @@ function reply_email(identifier) {
   .then(email => {
     // Pre-fill the fields with data
     document.querySelector('#reply-recipients').value = email.sender;
-    document.querySelector('#reply-subject').value = `RE: ${email.subject}`;
+    if ((email.subject).includes("RE: ")) {
+      document.querySelector('#reply-subject').value = email.subject;
+    }
+    else {
+      document.querySelector('#reply-subject').value = `RE: ${email.subject}`;
+    }
     document.querySelector('#reply-body').value = `On ${email.timestamp} ${email.sender} wrote: ${email.body}`;
     document.querySelector('#reply-recipients').disabled = true;
     document.querySelector('#reply-subject').disabled = true;
@@ -173,7 +180,6 @@ function reply_email_submit() {
       body: document.querySelector('#reply-body-editable').value
     })
   })
-  .then(response => response.json())
 }
 
 // Archive emails in Inbox
