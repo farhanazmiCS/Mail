@@ -202,6 +202,6 @@ function unarchive_email(identifier) {
       archived: false
     })
   });
-  // Load inbox
+  // Load archive
   load_mailbox('archive');
 }
