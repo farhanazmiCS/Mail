@@ -51,7 +51,8 @@ function send_email() {
       body: document.querySelector('#compose-body').value
     })
   })
-  .then(response => response.json())
+  // Load sent mailbox
+  load_mailbox('sent');
 }
 
 function fetch_mailbox(mailbox) {
@@ -70,16 +71,18 @@ function fetch_mailbox(mailbox) {
     div.setAttribute('onclick', `read_email(${element.id})`);
     // Sender
     var sender = document.createElement('h5');
+    sender.id = 'mail-sender';
     var sender_text = document.createTextNode(`${element.sender}`);
     sender.appendChild(sender_text);
     // Subject
     var subject = document.createElement('p');
+    subject.id = 'mail-subject';
     var subject_text = document.createTextNode(`${element.subject}`);
     subject.appendChild(subject_text);
     // Timestamp
     var timestamp = document.createElement('p');
+    timestamp.id = 'mail-timestamp';
     var timestamp_text = document.createTextNode(`${element.timestamp}`);
-    timestamp.style.color = 'grey';
     timestamp.appendChild(timestamp_text);
     // Append Sender, Subject and Button into 'div'
     div.appendChild(sender);
@@ -87,6 +90,12 @@ function fetch_mailbox(mailbox) {
     div.appendChild(timestamp);
     // Append into 'emails-view'
     document.getElementById('emails-view').appendChild(div);
+    // Show different style if email is not yet read
+    if (!element.read) {
+      div.style.border = '2.5px solid grey';
+      sender.style.fontWeight = '800';
+      subject.style.fontWeight = '800';
+    }
   }
 }
 
@@ -153,6 +162,7 @@ function reply_email(identifier) {
       document.querySelector('#reply-subject').value = `RE: ${email.subject}`;
     }
     document.querySelector('#reply-body').value = `On ${email.timestamp} ${email.sender} wrote: ${email.body}`;
+    // Disable the pre-filled fields
     document.querySelector('#reply-recipients').disabled = true;
     document.querySelector('#reply-subject').disabled = true;
     document.querySelector('#reply-body').disabled = true;
@@ -202,6 +212,6 @@ function unarchive_email(identifier) {
       archived: false
     })
   });
-  // Load archive
-  load_mailbox('archive');
+  // Load inbox
+  load_mailbox('inbox');
 }
