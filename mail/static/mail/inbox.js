@@ -123,7 +123,7 @@ function fetch_mailbox(mailbox) {
           unread.setAttribute('onclick', `unread_email(${element.id})`);
           var unread_icon = document.createElement('i');
           var unread_text = document.createElement('p');
-          unread_text.innerHTML = 'Unread';
+          unread_text.innerHTML = 'Mark as Unread';
           unread_text.className = 'annotation';
           unread_icon.className = 'fa fa-envelope';
           unread.appendChild(unread_icon);
