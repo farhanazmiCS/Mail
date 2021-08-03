@@ -3,61 +3,165 @@ textarea {
 }
 
 #mail-element {
-    border: 0.5px solid grey;
+    border: 0.5px solid #007bff;
     border-radius: 3px;
     padding-left: 10px;
     padding-top: 10px;
-    margin: 5px;
+    margin-bottom: 5px;
+}
+
+.reply {
+    display: inline-block;
+    color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.reply:hover {
+    display: inline-block;
+    color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.archive {
+    display: inline-block;
+    color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.archive:hover {
+    display: inline-block;
+    color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.unarchive {
+    display: inline-block;
+    color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.unarchive:hover {
+    display: inline-block;
+    color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.unread {
+    display: inline-block;
+    color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.unread:hover {
+    display: inline-block;
+    color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #reply {
     display: inline-block;
     color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #reply:hover {
+    display: inline-block;
     color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #archive {
+    display: inline-block;
     color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #archive:hover {
+    display: inline-block;
     color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #unarchive {
+    display: inline-block;
     color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #unarchive:hover {
+    display: inline-block;
     color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #unread {
+    display: inline-block;
     color: #007bff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #unread:hover {
+    display: inline-block;
     color: #00a6ff;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 #mail-timestamp {
     color: grey;
+    font-weight: 25;
 }
 
 #mail-sender {
     display: inline-block;
+    font-weight: 25;
 }
 
 #mail-subject {
     display: inline-block;
     padding-left: 20px;
+    font-weight: 25;
 }
 
 .annotation {
     display: inline-block; 
     padding-left: 5px;
     padding-right: 15px;
+}
+
+/* To remove highlight/focus on click. Src: https://stackoverflow.com/questions/19053181/how-to-remove-focus-around-buttons-on-click */
+.btn:focus {
+    outline: none;
+    box-shadow: none;
 }

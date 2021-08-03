@@ -67,31 +67,107 @@ function fetch_mailbox(mailbox) {
     // Each email contained in a div
     var div = document.createElement('div');
     div.id = 'mail-element';
-    div.setAttribute('onclick', `read_email(${element.id})`);
     // Sender
     var sender = document.createElement('h5');
     sender.id = 'mail-sender';
     var sender_text = document.createTextNode(`${element.sender}`);
     sender.appendChild(sender_text);
+    sender.setAttribute('onclick', `read_email(${element.id})`);
     // Subject
     var subject = document.createElement('p');
     subject.id = 'mail-subject';
     var subject_text = document.createTextNode(`${element.subject}`);
     subject.appendChild(subject_text);
+    subject.setAttribute('onclick', `read_email(${element.id})`);
     // Timestamp
     var timestamp = document.createElement('p');
     timestamp.id = 'mail-timestamp';
     var timestamp_text = document.createTextNode(`${element.timestamp}`);
     timestamp.appendChild(timestamp_text);
-    // Append Sender, Subject and Button into 'div'
+    // Append Sender, Subject, Timestamp into 'div'
     div.appendChild(sender);
     div.appendChild(subject);
     div.appendChild(timestamp);
+    if (element.sender != document.getElementById('logged-user').innerHTML) {
+      if (!element.archived) {
+        // For user's inbox
+        // Reply
+        var reply = document.createElement('div');
+        reply.className = 'reply';
+        reply.setAttribute('onclick', `reply_email(${element.id})`);
+        var reply_icon = document.createElement('i');
+        var reply_text = document.createElement('p');
+        reply_text.innerHTML = 'Reply';
+        reply_text.className = 'annotation';
+        reply_icon.className = 'fas fa-reply';
+        reply.appendChild(reply_icon);
+        reply.appendChild(reply_text);
+        // Archive
+        var archive = document.createElement('div');
+        archive.className = 'archive';
+        archive.setAttribute('onclick', `archive_email(${element.id})`);
+        var archive_icon = document.createElement('i');
+        var archive_text = document.createElement('p');
+        archive_text.innerHTML = 'Archive';
+        archive_text.className = 'annotation';
+        archive_icon.className = 'fas fa-trash';
+        archive.appendChild(archive_icon);
+        archive.appendChild(archive_text);
+        // Append
+        div.appendChild(reply);
+        div.appendChild(archive);
+        if (element.read) {
+          // Unread
+          var unread = document.createElement('div');
+          unread.className = 'unread';
+          unread.setAttribute('onclick', `unread_email(${element.id})`);
+          var unread_icon = document.createElement('i');
+          var unread_text = document.createElement('p');
+          unread_text.innerHTML = 'Unread';
+          unread_text.className = 'annotation';
+          unread_icon.className = 'fa fa-envelope';
+          unread.appendChild(unread_icon);
+          unread.appendChild(unread_text);
+          div.appendChild(unread);
+        }
+      }
+      else {
+        // User's archived mails
+        // Archived emails can only be unarchived
+        var unarchive = document.createElement('div');
+        unarchive.className = 'unarchive';
+        unarchive.setAttribute('onclick', `unarchive_email(${element.id})`);
+        var unarchive_icon = document.createElement('i');
+        var unarchive_text = document.createElement('p');
+        unarchive_text.innerHTML = 'Unarchive';
+        unarchive_text.className = 'annotation';
+        unarchive_icon.className = 'fas fa-trash-restore';
+        unarchive.appendChild(unarchive_icon);
+        unarchive.appendChild(unarchive_text);
+        // Append
+        div.appendChild(unarchive);
+      }
+    }
+    else {
+      // User's sent mails
+      // Sent emails can only be replied, not marked as unread or archived
+      var reply = document.createElement('div');
+      reply.className = 'reply';
+      reply.setAttribute('onclick', `reply_email(${element.id})`);
+      var reply_icon = document.createElement('i');
+      var reply_text = document.createElement('p');
+      reply_text.innerHTML = 'Reply';
+      reply_text.className = 'annotation';
+      reply_icon.className = 'fas fa-reply';
+      reply.appendChild(reply_icon);
+      reply.appendChild(reply_text);
+      // Append
+      div.appendChild(reply);
+    }
     // Append into 'emails-view'
     document.getElementById('emails-view').appendChild(div);
     // Show different style if email is not yet read
     if (!element.read) {
-      div.style.border = '2.5px solid grey';
       sender.style.fontWeight = '800';
       subject.style.fontWeight = '800';
     }
@@ -208,8 +284,10 @@ function archive_email(identifier) {
       archived: true
     })
   });
-  // Load inbox
-  load_mailbox('inbox');
+  // Load inbox (Set timeout is used to delay the loading, to allow the database to update first.)
+  setTimeout(() => {
+    load_mailbox('inbox');
+  }, 100);
 }
 
 // Unarchive emails in Inbox
@@ -221,7 +299,9 @@ function unarchive_email(identifier) {
     })
   });
   // Load inbox
-  load_mailbox('inbox');
+  setTimeout(() => {
+    load_mailbox('inbox');
+  }, 100);
 }
 
 // Function to "unread" email
@@ -232,5 +312,8 @@ function unread_email(identifier) {
       read: false,
     })
   })
-  load_mailbox('inbox')
+  // Load inbox
+  setTimeout(() => {
+    load_mailbox('inbox');
+  }, 100);
 }
