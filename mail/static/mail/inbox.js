@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', () => compose_email());
+  document.querySelector('#compose').addEventListener('click', compose_email);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -50,8 +50,10 @@ function send_email() {
       body: document.querySelector('#compose-body').value
     })
   })
-  // Load sent mailbox
-  load_mailbox('sent');
+  // Load sent
+  setTimeout(() => {
+    load_mailbox('sent');
+  }, 100);
 }
 
 function fetch_mailbox(mailbox) {
@@ -88,9 +90,9 @@ function fetch_mailbox(mailbox) {
     div.appendChild(sender);
     div.appendChild(subject);
     div.appendChild(timestamp);
+    // ** For user's inbox **
     if (element.sender != document.getElementById('logged-user').innerHTML) {
       if (!element.archived) {
-        // For user's inbox
         // Reply
         var reply = document.createElement('div');
         reply.className = 'reply';
@@ -116,8 +118,9 @@ function fetch_mailbox(mailbox) {
         // Append
         div.appendChild(reply);
         div.appendChild(archive);
+        // If email is already read
         if (element.read) {
-          // Unread
+          // Unread button
           var unread = document.createElement('div');
           unread.className = 'unread';
           unread.setAttribute('onclick', `unread_email(${element.id})`);
@@ -274,6 +277,10 @@ function reply_email_submit() {
       body: document.querySelector('#reply-body-editable').value
     })
   })
+  // Load sent
+  setTimeout(() => {
+    load_mailbox('sent');
+  }, 100);
 }
 
 // Archive emails in Inbox
@@ -283,7 +290,7 @@ function archive_email(identifier) {
     body: JSON.stringify({
       archived: true
     })
-  });
+  })
   // Load inbox (Set timeout is used to delay the loading, to allow the database to update first.)
   setTimeout(() => {
     load_mailbox('inbox');

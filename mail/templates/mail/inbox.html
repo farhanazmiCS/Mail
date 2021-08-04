@@ -16,7 +16,9 @@
 
     <div id="compose-view">
         <h3>New Email</h3>
-        <form id="compose-form">
+        <!-- onsubmit="return false" will not refresh page upon POST AJAX -->
+        <!-- src: https://www.codexpedia.com/javascript/submitting-html-form-without-reload-the-page/ -->
+        <form id="compose-form" onsubmit="return false">
             <div class="form-group">
                 From: <input disabled id="compose-sender" class="form-control" value="{{ request.user.email }}">
             </div>
@@ -27,13 +29,15 @@
                 <input class="form-control" id="compose-subject" placeholder="Subject">
             </div>
             <textarea class="form-control" id="compose-body" placeholder="Body" rows="4"></textarea><br>
-            <input type="submit" class="btn btn-primary"/>
+            <input type="submit" class="btn btn-primary" value="Send Email"/>
         </form>
     </div>
 
     <div id="reply-view">
         <h3>Reply Email</h3>
-        <form id="reply-form">
+        <!-- onsubmit="return false" will not refresh page upon POST AJAX -->
+        <!-- src: https://www.codexpedia.com/javascript/submitting-html-form-without-reload-the-page/ -->
+        <form id="reply-form" onsubmit="return false">
             <div class="form-group">
                 To: <input id="reply-recipients" class="form-control">
             </div>
