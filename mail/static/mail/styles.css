@@ -1,3 +1,26 @@
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+#title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+#heading-element {
+    margin: auto;
+    width: 50%;
+    position: relative;
+    padding-top: 15%;
+    text-align: center;
+}
+
+#logged-user {
+    font-weight: 250;
+    margin-bottom: 10px;
+}
+
 textarea {
     resize: none;
 }
@@ -10,7 +33,7 @@ textarea {
     margin-bottom: 5px;
 }
 
-.reply {
+.reply, .archive, .unarchive, .unread {
     display: inline-block;
     color: #007bff;
     margin-top: 5px;
@@ -18,7 +41,7 @@ textarea {
     margin-right: 5px;
 }
 
-.reply:hover {
+.reply:hover, .archive:hover, .unarchive:hover, #unread:hover {
     display: inline-block;
     color: #00a6ff;
     margin-top: 5px;
@@ -26,7 +49,7 @@ textarea {
     margin-right: 5px;
 }
 
-.archive {
+#reply, #archive, #unarchive, #unread {
     display: inline-block;
     color: #007bff;
     margin-top: 5px;
@@ -34,103 +57,7 @@ textarea {
     margin-right: 5px;
 }
 
-.archive:hover {
-    display: inline-block;
-    color: #00a6ff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.unarchive {
-    display: inline-block;
-    color: #007bff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.unarchive:hover {
-    display: inline-block;
-    color: #00a6ff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.unread {
-    display: inline-block;
-    color: #007bff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.unread:hover {
-    display: inline-block;
-    color: #00a6ff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#reply {
-    display: inline-block;
-    color: #007bff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#reply:hover {
-    display: inline-block;
-    color: #00a6ff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#archive {
-    display: inline-block;
-    color: #007bff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#archive:hover {
-    display: inline-block;
-    color: #00a6ff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#unarchive {
-    display: inline-block;
-    color: #007bff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#unarchive:hover {
-    display: inline-block;
-    color: #00a6ff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#unread {
-    display: inline-block;
-    color: #007bff;
-    margin-top: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-#unread:hover {
+#reply:hover, #archive:hover, #unarchive:hover, #unread:hover {
     display: inline-block;
     color: #00a6ff;
     margin-top: 5px;
@@ -164,4 +91,8 @@ textarea {
 .btn:focus {
     outline: none;
     box-shadow: none;
+}
+
+#login-button, #register-button {
+    margin-bottom: 10px;
 }

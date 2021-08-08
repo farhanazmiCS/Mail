@@ -30,6 +30,7 @@ function compose_email() {
 function load_mailbox(mailbox) {
   // Call fetch_email function
   fetch_mailbox(mailbox);
+
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
@@ -91,7 +92,7 @@ function fetch_mailbox(mailbox) {
     div.appendChild(subject);
     div.appendChild(timestamp);
     // ** For user's inbox **
-    if (element.sender != document.getElementById('logged-user').innerHTML) {
+    if (element.sender !== document.querySelector('strong').innerHTML) {
       if (!element.archived) {
         // Reply
         var reply = document.createElement('div');
@@ -128,7 +129,7 @@ function fetch_mailbox(mailbox) {
           var unread_text = document.createElement('p');
           unread_text.innerHTML = 'Mark as Unread';
           unread_text.className = 'annotation';
-          unread_icon.className = 'fa fa-envelope';
+          unread_icon.className = 'fas fa-envelope';
           unread.appendChild(unread_icon);
           unread.appendChild(unread_text);
           div.appendChild(unread);
@@ -198,7 +199,7 @@ function read_email(identifier) {
     var unread_element = document.querySelector('#unread');
     unread_element.style.display = 'none';
     // Archive / Unarchive button does not apply for sent emails
-    if (email.sender != document.getElementById('logged-user').innerHTML) {
+    if (email.sender !== document.querySelector('strong').innerHTML) {
       // If email not archived
       if (!email.archived) {
         archive_element.style.display = 'inline-block';
@@ -305,9 +306,9 @@ function unarchive_email(identifier) {
       archived: false
     })
   });
-  // Load inbox
+  // Load archive
   setTimeout(() => {
-    load_mailbox('inbox');
+    load_mailbox('archive');
   }, 100);
 }
 
